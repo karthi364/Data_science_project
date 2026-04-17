@@ -1,0 +1,18 @@
+lgbm = LGBMClassifier(class_weight='balanced', random_state=42)
+
+param_grid_lgbm = {
+    'n_estimators': [100, 200],
+    'num_leaves': [31, 50],
+    'learning_rate': [0.05, 0.1],
+    'max_depth': [-1, 10]
+}
+
+grid_lgbm = GridSearchCV(lgbm, param_grid_lgbm, cv=3, scoring='accuracy', n_jobs=-1)
+grid_lgbm.fit(X_train, y_train)
+
+best_lgbm = grid_lgbm.best_estimator_
+
+y_pred_lgbm = best_lgbm.predict(X_test)
+
+print("Best LightGBM Params:", grid_lgbm.best_params_)
+print(classification_report(y_test, y_pred_lgbm))
